@@ -1,0 +1,128 @@
+﻿﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.Extensions.Options
+@using System.Globalization
+@using Microsoft.AspNetCore.Mvc.Localization
+@{
+	var cultureList = locOptions.Value.SupportedUICultures;
+
+}
+
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor _httpContext
+@inject IOptions<RequestLocalizationOptions> locOptions
+@inject IViewLocalizer _lang
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>@ViewData["Title"] - TestApp</title>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+	<link rel="stylesheet" href="~/css/main.css" />
+	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body class="is-preload">
+
+	<!-- Wrapper -->
+	<div id="wrapper">
+		<!-- Header -->
+		<header id="header">
+			<h1><a a asp-controller="Home" asp-action="Index">Test App</a></h1>
+			<nav class="links">
+				<ul>
+					<li><a asp-controller="Home" asp-action="Index">@_lang["home"]</a></li>
+					<li><a asp-controller="Home" asp-action="AboutUs">@_lang["aboutUs"]</a></li>
+					<li><a asp-controller="Home" asp-action="Privacy">@_lang["privacy"]</a></li>
+				</ul>
+			</nav>
+			<nav class="main">
+				<ul>
+					<li class="search">
+						<a class="fa-search" href="#search">@_lang["search"]</a>
+						<form id="search" method="get" action="#">
+							<input type="text" name="query" placeholder="@_lang["search"]" />
+						</form>
+					</li>
+					<li class="menu">
+						<a class="fa-bars" href="#menu">Menu</a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<!-- Menu -->
+		<section id="menu">
+
+			<!-- Search -->
+			<section>
+				<form class="search" method="get" action="#">
+					<input type="text" name="query" placeholder="@_lang["search"]" />
+				</form>
+			</section>
+
+			<!-- Links -->
+			<section>
+				<ul class="links">
+					<li>
+						<a href="#">
+							<h3>Lorem ipsum</h3>
+							<p>Feugiat tempus veroeros dolor</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h3>Dolor sit amet</h3>
+							<p>Sed vitae justo condimentum</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h3>Feugiat veroeros</h3>
+							<p>Phasellus sed ultricies mi congue</p>
+						</a>
+					</li>
+					<li>
+						<a href="#">
+							<h3>Etiam sed consequat</h3>
+							<p>Porta lectus amet ultricies</p>
+						</a>
+					</li>
+				</ul>
+			</section>
+
+			<!-- Actions -->
+			<section>
+				<ul class="actions stacked">
+					<li><a asp-controller="Home" asp-action="Login" class="button large fit">@_lang["login"]</a></li>
+				</ul>
+			</section>
+
+		</section>
+		@RenderBody()
+
+		</div>
+	<div>
+
+		<footer class="d-flex flex-wrap justify-content-between align-items-center py-1 my-4 border-top  navbar navbar-fixed-bottom">
+		<div class="col-md-4 d-flex align-items-center">
+			<span class="mb-3 mb-md-0 text-muted">© 2024 Test App, Inc</span>
+		</div>
+		<ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+			<li><a href="#" class="icon brands fa-twitter"><span class="label">Twitter</span></a></li>
+			<li><a href="#" class="icon brands fa-facebook-f"><span class="label">Facebook</span></a></li>
+			<li><a href="#" class="icon brands fa-instagram"><span class="label">Instagram</span></a></li>
+			<li><a href="#" class="icon solid fa-rss"><span class="label">RSS</span></a></li>
+			<li><a href="#" class="icon solid fa-envelope"><span class="label">Email</span></a></li>
+
+		</ul>
+	</footer>
+	</div>
+	<!-- Scripts -->
+	<script src="~/js/jquery.min.js"></script>
+	<script src="~/js/browser.min.js"></script>
+	<script src="~/js/breakpoints.min.js"></script>
+	<script src="~/js/util.js"></script>
+	<script src="~/js/main.js"></script>
+</body>
+</html>
