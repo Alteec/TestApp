@@ -1,40 +1,86 @@
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using TestApp;
+using Data.DataContext;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using TestApp.Data;
+using TestApp.Data.Interfaces;
+using TestApp.Models;
+using TestApp.Repository;
 
-namespace Hotel.ATR.Portal
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddControllersWithViews();
+builder.Services.AddMvc().AddViewLocalization(LanguageViewLocationExpanderFormat.Suffix);
+builder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			CreateHostBuilder(args).Build().Run();
-		}
+    var culturies = new[]
+    {
+                    new CultureInfo("ru-Ru"),
+                    new CultureInfo("en-US")
+                };
 
-		public static IHostBuilder CreateHostBuilder(string[] args) =>
-			Host.CreateDefaultBuilder(args)
-				//.ConfigureLogging(logBuilder =>
-				//{
-				//    logBuilder.ClearProviders();
-				//    //logBuilder.AddDebug()
-				//    //.AddEventLog()
-				//    //.AddConsole();
+    options.DefaultRequestCulture = new RequestCulture("ru-Ru", "ru-Ru");
 
-				//    //logBuilder.AddSeq();
+    options.SupportedCultures = culturies;
+    options.SupportedUICultures = culturies;
+});
 
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddDistributedMemoryCache();
 
+builder.Services.AddDbContext<DataContext>(options =>
+{
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
+builder.Services.AddIdentity<User, IdentityRole>().AddEntityFrameworkStores<DataContext>();
+builder.Services.AddSession(options =>
+{
 
+	options.IdleTimeout = TimeSpan.FromSeconds(10);
+	options.Cookie.HttpOnly = true;
+	options.Cookie.Name = "Session";
+});
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 
-				//})
-				.ConfigureWebHostDefaults(webBuilder =>
-				{
-					webBuilder.UseStartup<Startup>();
-				});
-	}
+builder.Services.AddScoped<IPostRepository, PostRepository>();
+
+var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Home/Error");
+    app.UseHsts();
 }
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+
+
+var context = services.GetRequiredService<DataContext>();
+var userManager = services.GetRequiredService<UserManager<User>>();
+
+await context.Database.MigrateAsync();
+await Seed.SeedData(context, userManager);
+
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
+var locOptions = app.Services.GetService<IOptions<RequestLocalizationOptions>>();
+app.UseRequestLocalization(locOptions.Value);
+
+
+app.UseAuthorization();
+
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.Run();

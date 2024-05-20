@@ -1,0 +1,45 @@
+﻿@model Post
+
+
+@{
+	ViewData["Title"] = "Post";
+}
+
+<!-- Wrapper -->
+<div id="wrapper">
+
+	<!-- Main -->
+	<div id="main">
+
+		<!-- Post -->
+		<article class="post">
+			<header>
+				<div class="title">
+					<h2><a href="#"></a>@Model.Title</h2>
+					<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+				</div>
+				<div class="meta">
+					<time class="published" datetime="2015-11-01">November 1, 2015</time>
+					<a href="#" class="author"><span class="name">@Model.User.UserName</span><img src="images/avatar.jpg" alt="" /></a>
+					<div class="col-12">
+						<a asp-controller="Post" asp-action="Delete" asp-route-id="@Model.Id">Delete</a>
+						<a asp-controller="Post" asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+
+					</div>
+				</div>
+
+			</header>
+			<span class="image featured"><img src=@Model.Photo alt="" /></span>
+			<p>@Model.Text</p>
+			<footer>
+				<ul class="stats">
+					<li><a href="#">@Model.Category</a></li>
+				</ul>
+			</footer>
+		</article>
+
+	</div>
+
+
+
+</div>

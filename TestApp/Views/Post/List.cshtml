@@ -1,0 +1,77 @@
+﻿@model List<Post>
+
+@{
+
+}
+
+<!-- Main -->
+<div id="main">
+	@if (Model is not null)
+	{
+		foreach (var post in Model) // Print the list
+		{
+			<!-- Post -->
+			<article class="post">
+				<header>
+					<div class="title">
+						<h2><a a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id">@post.Title @post.Id</a></h2>
+						<p>Lorem ipsum dolor amet nullam consequat etiam feugiat</p>
+					</div>
+					<div class="meta">
+						<time class="published" datetime="2023-11-01">@post.Date</time>
+						<a asp-controller="Post" asp-action="AboutUs" class="author"><span class="name">@post.User.UserName</span><img src="images/avatar.jpg" alt="" /></a>
+					</div>
+				</header>
+				<a a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="image featured"><img src="@post.Photo" alt="" /></a>
+				<p>@post.Text</p>
+				<footer>
+					<ul class="actions">
+						<li><a asp-controller="Post" asp-action="Details" asp-route-id="@post.Id" class="button large">Continue Reading</a></li>
+					</ul>
+					<ul class="stats">
+						<li><a href="#">@post.Category</a></li>
+					</ul>
+				</footer>
+			</article>
+		}
+	}
+	<!-- Pagination -->
+	<ul class="actions pagination">
+		<li><a href="" class="disabled button large previous">Previous Page</a></li>
+		<li><a href="#" class="button large next">Next Page</a></li>
+	</ul>
+
+</div>
+
+<!-- Sidebar -->
+<section id="sidebar">
+
+	<!-- Intro -->
+	<section id="intro">
+		<a href="#" class="logo"><img src="images/logo.jpg" alt="" /></a>
+		<header>
+			<h2>Test App</h2>
+			<p>Text</p>
+		</header>
+	</section>
+
+
+	<section>
+		<div class="mini-posts">
+			<!-- Mini Posts -->
+
+				<!-- Mini Post -->
+				<article class="mini-post">
+					<header>
+					<h3><a href="single.html">@Model?[0].Title</a></h3>
+					<time class="published" datetime="2023-10-20">@Model?[0].Date</time>
+						<a href="#" class="author"><img src="images/avatar.jpg" alt="" /></a>
+					</header>
+					<a href="single.html" class="image"><img src=@Model?[0].Photo alt="" /></a>
+				</article>
+
+		</div>
+
+
+</section>
+</section>

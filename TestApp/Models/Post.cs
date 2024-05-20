@@ -1,17 +1,21 @@
-﻿using Microsoft.VisualBasic;
+﻿
+using System.ComponentModel.DataAnnotations;
+using TestApp.Models.Enums;
 
 namespace TestApp.Models
 {
     public class Post
     {
-            public int Id { get; set; }
-            public int UserId {  get; set; }
-            public string? Title { get; set; }
-            public string? Text { get; set; }
+            [Key]
+            public Guid Id { get; set; }
+
+		    public string Title { get; set; }
+
+		    public string Text { get; set; }
             public string? Photo { get; set; }
-            public DateTime Created { get; set; }
-
-            public string Date => Created.ToString("dd/MM/yyyy");
-
+            public DateTime Date { get; set; }
+            public User User { get; set; }
+            public Category Category { get; set; }
+            
 	}
 }

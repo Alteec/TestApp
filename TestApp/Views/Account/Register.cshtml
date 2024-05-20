@@ -1,0 +1,46 @@
+﻿@using TestApp.ViewModels
+
+@model RegisterViewModel
+@{
+	ViewData["Title"]="Register";
+}
+
+<section>
+	<h3>Register</h3>
+	<form method="post" asp-action="Register">
+		<div class="rowgtr-uniform">
+
+			<div class="col-6col-12">
+				<label asp-for="Username">Username</label>
+				<input asp-for="Username"placeholder="Username"></input>
+				<span asp-validation-for="Username"class="text-danger"></span>
+
+			</div>
+			<div class="col-6 col-12">
+				<label asp-for="EmailAddress">Email</label>
+				<input asp-for="EmailAddress"placeholder="Email"></input>
+				<span asp-validation-for="EmailAddress"class="text-danger"></span>
+
+			</div>
+			<div class="col-6 col-12">
+				<label asp-for="Password">Password</label>
+				<input asp-for="Password"placeholder="Password"></input>
+				<span asp-validation-for="Password" class="text-danger"></span>
+
+			</div>
+			@if (TempData["Error"] != null)
+			{
+				<div class="col-md-12">
+					<span class="text-danger">@TempData["Error"] </span>
+				</div>
+			}
+
+
+			<div class="col-12">
+				<input type="submit"value="Submit"/>
+			</div>
+		</div>
+	</form>
+	<a asp-controller="Account" asp-action="Login" class="small fit">Login</a>
+
+</section>
